@@ -4,30 +4,23 @@
 
 Cocooned makes it easier to handle nested forms in a Rails project.
 
-Cocooned is form builder-agnostic: it works with standard Rails (>= 5.0, < 7.0), [Formtastic](https://github.com/justinfrench/formtastic) or [SimpleForm](https://github.com/plataformatec/simple_form).
+Cocooned is form builder-agnostic: it works with standard Rails (>= 5.0, < 7.0) form helpers, [Formtastic](https://github.com/justinfrench/formtastic) or [SimpleForm](https://github.com/plataformatec/simple_form).
+
+**Cocooned does not depend on jQuery** but can be integrated to use it. Your project, your choice.
 
 ## Some Background
 
-Cocooned is a fork of [Cocoon](https://github.com/nathanvda/cocoon) by [Nathan Van der Auwera](https://github.com/nathanvda).
+Cocooned is a fork of [Cocoon](https://github.com/nathanvda/cocoon) by [Nathan Van der Auwera](https://github.com/nathanvda). He and all Cocoon contributors did a great job to maintain it for years. Many thanks to them!
 
-He and all Cocoon contributors did a great job to maintain it for years. Many thanks to them!
+However, the project seems to have only received minimal fixes since 2018 and many pull requests, even simple ones, have been on hold for a long time. In 2019, as I needed a more than what Cocoon provided at this time, I had the choice to either maintain an extension or to fork it and integrate everything that was waiting and more.
 
-But last time I checked, the project seemed to not have been actively maintained for a long time and many pull requests, even simple ones, were on hold. As I needed a more than what Cocoon provided at this time, I had the choice to either maintain an extension or to fork it and integrate everything that was waiting and more.
+Cocooned is almost a complete rewrite of Cocoon, with more functionnalities, a more fluent API (I hope) and integration with modern toolchains (including webpacker).
 
-Cocooned is almost a complete rewrite of Cocoon, with more functionnalities and (I hope) a more fluent API.
+**For now, Cocooned is completely compatible with Cocoon and can be used as a drop-in replacement** as long as we talk about Ruby code. Just change the name of the gem in your Gemfile and you're done. It will work the same (but will add a bunch of deprecation warning to your logs).
 
-**For now, Cocooned is completely compatible with Cocoon and can be used as a drop-in replacement** as long as we talk about Ruby code.  
-Just change the name of the gem in your Gemfile and you're done. It will work the same (but will add a bunch of deprecation warning to your logs).
+**This compatibility layer with the original Cocoon API will be dropped in Cocooned 3.0.**
 
-**This compatibility layer with the original Cocoon API will be dropped in Cocooned 2.0.**
-
-On the JavaScript side, Cocoon 1.2.13 introduced the original browser event as a third parameter to all event handlers. Meanwhile, Cocooned already started to use this positional parameter to pass the Cocooned object instance (since 1.3.0).
-
-To get access to the original event, [you'll have to change your handlers and use `event.originalEvent`](#javascript-callbacks).
-
-## Prerequisites
-
-Cocooned depends on jQuery, Ruby (>= 2.5) and Rails (>= 5.0, < 7.0).
+On the JavaScript side, Cocoon 1.2.13 introduced the original browser event as a third parameter to all event handlers. Meanwhile, Cocooned already started to use this positional parameter to pass the Cocooned object instance (since 1.3.0). To get access to the original event, [you'll have to change your handlers and use `event.originalEvent`](#javascript-callbacks).
 
 ## Installation
 
@@ -97,7 +90,7 @@ E.g. in your `ListsController`:
 <% end %>
 ```
 
-To enable Cocooned on this first, we need to:
+To enable Cocooned on this form, we need to:
 
 1. Move the nested form to a partial
 2. Add a way to add a new item to the collection
@@ -194,7 +187,7 @@ This detection is based on the presence of a `data-cocooned-options` attribute o
 </div>
 ``` 
 
-And we're done!
+You're done!
 
 ### Wait, what's the point of `data-cocooned-options` if it's to be empty?
 
