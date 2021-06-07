@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
   spec.authors      = ['Gaël-Ian Havard', 'Nathan Van der Auwera']
   spec.email        = ['gael-ian@notus.sh', 'nathan@dixis.com']
 
-  spec.summary      = 'Unobtrusive nested forms handling using jQuery.'
+  spec.summary      = 'Unobtrusive Rails nested forms handling, with or without jQuery.'
   spec.description  = 'Easier nested form. Supports standard Rails forms, Formtastic and SimpleForm.'
   spec.homepage     = 'http://github.com/notus-sh/cocooned'
 

@@ -1,5 +1,9 @@
 # Change History / Release Notes
 
+## Version 2.0.0 (Not released yet)
+
+* Remove dependency to jQuery
+
 ## Version 1.4.0
 
 * Drop support for Rails < 5.0 and Ruby < 2.5 
