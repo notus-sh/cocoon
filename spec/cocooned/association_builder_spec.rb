@@ -5,7 +5,7 @@ describe Cocooned::AssociationBuilder do
     it 'creates correct association for belongs_to associations' do
       post = Post.new
       form = double(object: post)
-      builder = Cocooned::AssociationBuilder.new(form, :author)
+      builder = described_class.new(form, :author)
       result = builder.build_object
 
       expect(result).to be_a Person
@@ -15,7 +15,7 @@ describe Cocooned::AssociationBuilder do
     it 'creates correct association with conditions' do
       person = Person.new
       form = double(object: person)
-      builder = Cocooned::AssociationBuilder.new(form, :alumni)
+      builder = described_class.new(form, :alumni)
       result = builder.build_object
 
       expect(result).to be_a Person
@@ -26,7 +26,7 @@ describe Cocooned::AssociationBuilder do
     it 'creates correct association for has_one associations' do
       person = Person.new
       form = double(object: person)
-      builder = Cocooned::AssociationBuilder.new(form, :biography)
+      builder = described_class.new(form, :biography)
       result = builder.build_object
 
       expect(result).to be_a Post
@@ -36,7 +36,7 @@ describe Cocooned::AssociationBuilder do
     it 'creates correct association for has_many associations' do
       person = Person.new
       form = double(object: person)
-      builder = Cocooned::AssociationBuilder.new(form, :posts)
+      builder = described_class.new(form, :posts)
       result = builder.build_object
 
       expect(result).to be_a Post
@@ -46,7 +46,7 @@ describe Cocooned::AssociationBuilder do
     it 'creates correct association for has_and_belongs_to_many associations' do
       person = Person.new
       form = double(object: person)
-      builder = Cocooned::AssociationBuilder.new(form, :contacts)
+      builder = described_class.new(form, :contacts)
       result = builder.build_object
 
       expect(result).to be_a Person
@@ -56,7 +56,7 @@ describe Cocooned::AssociationBuilder do
     it 'creates an object if cannot reflect on association' do
       object = double('AnyNonActiveRecordObject')
       form = double(object: object)
-      builder = Cocooned::AssociationBuilder.new(form, :non_reflectable)
+      builder = described_class.new(form, :non_reflectable)
 
       expect(object).to receive(:build_non_reflectable).and_return 'custom'
       result = builder.build_object
@@ -73,7 +73,7 @@ describe Cocooned::AssociationBuilder do
       it 'creates an association as singular' do
         object = subject.new
         form = double(object: object)
-        builder = Cocooned::AssociationBuilder.new(form, :custom_item)
+        builder = described_class.new(form, :custom_item)
 
         expect(object).to receive(:build_custom_item).and_return('custom')
         result = builder.build_object
@@ -83,7 +83,7 @@ describe Cocooned::AssociationBuilder do
       it 'creates an association as plural' do
         object = subject.new
         form = double(object: object)
-        builder = Cocooned::AssociationBuilder.new(form, :custom_items)
+        builder = described_class.new(form, :custom_items)
 
         expect(object).to receive(:build_custom_item).and_return('custom')
         result = builder.build_object
@@ -94,7 +94,7 @@ describe Cocooned::AssociationBuilder do
     it 'can create using only conditions not the association' do
       person = Person.new
       form = double(object: person)
-      builder = Cocooned::AssociationBuilder.new(form, :alumni, force_non_association_create: true)
+      builder = described_class.new(form, :alumni, force_non_association_create: true)
 
       expect(builder).to receive(:build_with_conditions).and_return('flappie')
       result = builder.build_object
@@ -104,7 +104,7 @@ describe Cocooned::AssociationBuilder do
     it 'can wrap object' do
       person = Person.new
       form = double(object: person)
-      builder = Cocooned::AssociationBuilder.new(form, :posts, wrap_object: proc { |p| PostDecorator.new(p) })
+      builder = described_class.new(form, :posts, wrap_object: proc { |p| PostDecorator.new(p) })
 
       result = builder.build_object
       expect(result).to be_a(PostDecorator)

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 describe Cocooned::Helpers do
-  before(:each) do
+  before do
     @view = Class.new(ActionView::Base).new
     @person = Person.new
     @form = double(object: @person, object_name: @person.class.name)
@@ -14,7 +14,7 @@ describe Cocooned::Helpers do
       end
     end
 
-    it_should_behave_like 'a link helper', :up, 2
+    it_behaves_like 'a link helper', :up, 2
 
     it 'has the correct CSS classes' do
       link = parse_link(subject.call('label', @form))
@@ -38,7 +38,7 @@ describe Cocooned::Helpers do
       end
     end
 
-    it_should_behave_like 'a link helper', :down, 2
+    it_behaves_like 'a link helper', :down, 2
 
     it 'has the correct CSS classes' do
       link = parse_link(subject.call('label', @form))

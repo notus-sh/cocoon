@@ -1,5 +1,9 @@
 ---
-require: rubocop-performance
+require:
+  - rubocop-performance
+  - rubocop-rails
+  - rubocop-rake
+  - rubocop-rspec
 
 inherit_mode:
   merge:

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 describe Cocooned::Helpers do
-  before(:each) do
+  before do
     @view = Class.new(ActionView::Base).new
     @person = Person.new
     @form = double(object: @person, object_name: @person.class.name)
@@ -15,11 +15,11 @@ describe Cocooned::Helpers do
     end
 
     context 'anytime' do
-      before(:each) do
+      before do
         allow(@view).to receive(:cocooned_render_association).and_return('<form>')
       end
 
-      it_should_behave_like 'a link helper', :add, 3
+      it_behaves_like 'a link helper', :add, 3
 
       it 'has the correct CSS classes' do
         link = parse_link(subject.call('label', @form, :posts))
@@ -61,7 +61,7 @@ describe Cocooned::Helpers do
 
     context 'when called with rendering option' do
       shared_examples_for 'an association renderer' do |options = {}|
-        it 'should forward it to #cocooned_render_association' do
+        it 'forwards it to #cocooned_render_association' do
           expect(@view).to receive(:cocooned_render_association)
             .once
             .with(anything, hash_including(options))
@@ -72,12 +72,12 @@ describe Cocooned::Helpers do
       end
 
       context ':partial' do
-        before(:each) do
+        before do
           # As we test partial rendering, just bypass the form builder
           allow(@form).to receive(:fields_for) { |_, _, _, &block| block.call }
         end
 
-        it_should_behave_like 'an association renderer', partial: 'partial'
+        it_behaves_like 'an association renderer', partial: 'partial'
 
         it 'where it will be correctly used' do
           expect(@view).to receive(:render)
@@ -99,12 +99,12 @@ describe Cocooned::Helpers do
       end
 
       context ':locals' do
-        before(:each) do
+        before do
           # As we test partial rendering, just bypass the form builder
           allow(@form).to receive(:fields_for) { |_, _, _, &block| block.call }
         end
 
-        it_should_behave_like 'an association renderer', locals: { name: 'value' }
+        it_behaves_like 'an association renderer', locals: { name: 'value' }
 
         it 'where it will be correctly used' do
           expect(@view).to receive(:render)
@@ -126,12 +126,12 @@ describe Cocooned::Helpers do
       end
 
       context ':form_name' do
-        before(:each) do
+        before do
           # As we test partial rendering, just bypass the form builder
           allow(@form).to receive(:fields_for) { |_, _, _, &block| block.call }
         end
 
-        it_should_behave_like 'an association renderer', form_name: 'form'
+        it_behaves_like 'an association renderer', form_name: 'form'
 
         it 'where it will be correctly used' do
           expect(@view).to receive(:render)
@@ -153,7 +153,7 @@ describe Cocooned::Helpers do
       end
 
       context ':form_options' do
-        it 'should be passed to the form builder' do
+        it 'is passed to the form builder' do
           expect(@form).to receive(:fields_for)
             .with(anything, anything, hash_including(wrapper: 'inline'))
             .and_return('<form>')
@@ -164,7 +164,7 @@ describe Cocooned::Helpers do
     end
 
     context 'when called with association option' do
-      before(:each) do
+      before do
         allow(@view).to receive(:cocooned_render_association).and_return('<form>')
       end
 
@@ -218,7 +218,7 @@ describe Cocooned::Helpers do
       end
 
       context ':wrap_object' do
-        it 'should pass it to the association builder' do
+        it 'passes it to the association builder' do
           expect_any_instance_of(Cocooned::AssociationBuilder).to receive(:options=)
             .with(hash_including(wrap_object: duck_type(:call)))
 
@@ -227,7 +227,7 @@ describe Cocooned::Helpers do
       end
 
       context ':force_non_association_create' do
-        it 'should pass it to the association builder' do
+        it 'passes it to the association builder' do
           expect_any_instance_of(Cocooned::AssociationBuilder).to receive(:options=)
             .with(hash_including(force_non_association_create: true))
 

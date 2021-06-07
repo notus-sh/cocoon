@@ -19,15 +19,12 @@ Gem::Specification.new do |spec|
 
   spec.metadata['allowed_push_host'] = 'https://rubygems.org'
 
-  # rubocop:disable Performance/CollectionLiteralInLoop
   spec.require_paths = ['lib']
-  spec.files         = `git ls-files -z`.split("\x0").reject do |f|
+  spec.files = `git ls-files -z`.split("\x0").reject do |f|
     f.match(%r{^(config|gemfiles|npm|spec)/}) ||
       %w[.gitignore .rspec .travis.yml].include?(f) ||
       %w[Gemfile Gemfile.lock package.json yarn.lock].include?(f)
   end
-  # rubocop:enable Performance/CollectionLiteralInLoop
-
   spec.required_ruby_version = '>= 2.5'
 
   spec.add_dependency 'rails', '>= 5.0', '<= 7.0'
@@ -39,4 +36,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rspec-rails', '~> 4.0.0'
   spec.add_development_dependency 'rubocop'
   spec.add_development_dependency 'rubocop-performance'
+  spec.add_development_dependency 'rubocop-rails'
+  spec.add_development_dependency 'rubocop-rake'
+  spec.add_development_dependency 'rubocop-rspec'
 end

@@ -7,10 +7,10 @@ require 'cocooned/association_builder'
 module Cocooned
   # TODO: Remove in 2.0 (Only Cocoon class names).
   HELPER_CLASSES = {
-    add:    %w[cocooned-add add_fields],
+    add: %w[cocooned-add add_fields],
     remove: %w[cocooned-remove remove_fields],
-    up:     %w[cocooned-move-up],
-    down:   %w[cocooned-move-down]
+    up: %w[cocooned-move-up],
+    down: %w[cocooned-move-down]
   }.freeze
 
   module Helpers # rubocop:disable Metrics/ModuleLength

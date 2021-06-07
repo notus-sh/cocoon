@@ -7,7 +7,7 @@ module Cocooned
   class Railtie < ::Rails::Engine
     initializer 'cocooned.initialize' do |_app|
       ActiveSupport.on_load :action_view do
-        ActionView::Base.send :include, Cocooned::Helpers
+        ActionView::Base.include Cocooned::Helpers
       end
     end
   end

@@ -11,17 +11,17 @@ describe Cocooned::Railtie do
 end
 
 describe Cocooned::Helpers do
-  before(:each) do
+  before do
     @tester = Class.new(ActionView::Base).new
   end
 
   describe '#cocooned_default_label' do
-    after(:each) do
+    after do
       I18n.reload!
     end
 
     context 'using the :cocoon i18n scope' do
-      before(:each) do
+      before do
         allow(self).to receive(:warn)
         I18n.backend.store_translations(:en, cocoon: {
                                           defaults: { remove: 'Remove' },
@@ -29,19 +29,19 @@ describe Cocooned::Helpers do
                                         })
       end
 
-      it 'should use custom translations when available' do
+      it 'uses custom translations when available' do
         capture_stderr do
           expect(@tester.send(:cocooned_default_label, :remove, :posts)).to eq('Remove this post')
         end
       end
 
-      it 'should use default translations when not' do
+      it 'uses default translations when not' do
         capture_stderr do
           expect(@tester.send(:cocooned_default_label, :remove, :people)).to eq('Remove')
         end
       end
 
-      it 'should emit a warning' do
+      it 'emits a warning' do
         expect(capture_stderr { @tester.send(:cocooned_default_label, :remove, :people) }).not_to be_empty
       end
     end
@@ -49,7 +49,7 @@ describe Cocooned::Helpers do
 end
 
 describe Cocooned::Helpers do
-  before(:each) do
+  before do
     @view = Class.new(ActionView::Base).new
     @person = Person.new
     @form = double(object: @person, object_name: @person.class.name)
@@ -64,7 +64,7 @@ describe Cocooned::Helpers do
 
     context 'when called with compatibility option' do
       context ':render_options' do
-        it 'should be passed to the form builder' do
+        it 'is passed to the form builder' do
           expect(@form).to receive(:fields_for)
             .with(anything, anything, hash_including(wrapper: 'inline'))
             .and_return('<form>')
@@ -74,7 +74,7 @@ describe Cocooned::Helpers do
           end
         end
 
-        it 'should emit a warning' do
+        it 'emits a warning' do
           # Just bypass the complete association rendering, as options extraction already
           # occured when it's called.
           allow(@view).to receive(:cocooned_render_association).and_return('<form>')
@@ -87,12 +87,12 @@ describe Cocooned::Helpers do
       end
 
       context ':render_options with a :locals key' do
-        before(:each) do
+        before do
           # As we test partial rendering, just bypass the form builder
           allow(@form).to receive(:fields_for) { |_, _, _, &block| block.call }
         end
 
-        it 'should forward it to #cocooned_render_association' do
+        it 'forwards it to #cocooned_render_association' do
           expect(@view).to receive(:cocooned_render_association)
             .once
             .with(anything, hash_including(locals: { name: 'value' }))
