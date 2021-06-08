@@ -1,24 +1,22 @@
 # frozen_string_literal: true
 
 describe Cocooned::Helpers do
-  before do
-    @view = Class.new(ActionView::Base).new
-    @person = Person.new
-    @form = double(object: @person, object_name: @person.class.name)
-  end
+  let(:view) { ActionView::Base.empty }
+  let(:form) { double(object: person, object_name: person.class.name) }
+  let(:person) { Person.new }
 
   describe '#cocooned_add_item_link' do
     subject do
       proc do |*args, &block|
-        @view.cocooned_add_item_link(*args, &block)
+        view.cocooned_add_item_link(*args, &block)
       end
     end
 
     context 'with simple_form' do
       before do
-        allow(@form).to receive_message_chain(:class, :ancestors) { ['SimpleForm::FormBuilder'] }
-        expect(@form).to receive(:simple_fields_for).and_return('<form>')
-        expect(@form).not_to receive(:fields_for)
+        allow(form).to receive_message_chain(:class, :ancestors) { ['SimpleForm::FormBuilder'] }
+        expect(form).to receive(:simple_fields_for).and_return('<form>')
+        expect(form).not_to receive(:fields_for)
       end
 
       it_behaves_like 'a link helper', :add, 3

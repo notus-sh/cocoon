@@ -2,7 +2,7 @@
 
 shared_examples_for 'a link helper' do |action, arity|
   it 'accepts an explicit name as label' do
-    arguments = ['label', @form]
+    arguments = ['label', form]
     arguments << :posts if arity == 3
 
     link = parse_link(subject.call(*arguments))
@@ -10,7 +10,7 @@ shared_examples_for 'a link helper' do |action, arity|
   end
 
   it 'can capture a block as label' do
-    arguments = [@form]
+    arguments = [form]
     arguments << :posts if arity == 3
 
     link = parse_link(subject.call(*arguments) { 'label' })
@@ -20,7 +20,7 @@ shared_examples_for 'a link helper' do |action, arity|
   it 'look up for translations to use as label if neither an explicit label nor a block is given' do
     expect(I18n).to receive(:translate).at_least(:once).and_call_original
 
-    arguments = [@form]
+    arguments = [form]
     arguments << :posts if arity == 3
 
     link = parse_link(subject.call(*arguments))
@@ -28,7 +28,7 @@ shared_examples_for 'a link helper' do |action, arity|
   end
 
   it 'has an empty href' do
-    arguments = ['label', @form]
+    arguments = ['label', form]
     arguments << :posts if arity == 3
 
     link = parse_link(subject.call(*arguments))
@@ -36,7 +36,7 @@ shared_examples_for 'a link helper' do |action, arity|
   end
 
   it 'pass additional options to link_to' do
-    arguments = ['label', @form]
+    arguments = ['label', form]
     arguments << :posts if arity == 3
     arguments << { rel: 'no-follow', hreflang: :en }
 
@@ -46,7 +46,7 @@ shared_examples_for 'a link helper' do |action, arity|
   end
 
   it 'does not alter options' do
-    arguments = ['label', @form]
+    arguments = ['label', form]
     arguments << :posts if arity == 3
     arguments << { class: 'specific-class' }
 

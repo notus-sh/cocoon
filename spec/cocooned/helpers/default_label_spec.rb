@@ -2,13 +2,9 @@
 
 describe Cocooned::Helpers do
   describe '#cocooned_default_label' do
-    before do
-      @tester = Class.new(ActionView::Base).new
-    end
+    subject(:tester) { ActionView::Base.empty }
 
-    after do
-      I18n.reload!
-    end
+    after { I18n.reload! }
 
     context 'using the :cocooned i18n scope' do
       before do
@@ -19,17 +15,17 @@ describe Cocooned::Helpers do
       end
 
       it 'uses custom translations when available' do
-        expect(@tester.send(:cocooned_default_label, :remove, :posts)).to eq('Remove this post')
+        expect(tester.send(:cocooned_default_label, :remove, :posts)).to eq('Remove this post')
       end
 
       it 'uses default translations when not' do
-        expect(@tester.send(:cocooned_default_label, :remove, :people)).to eq('Remove')
+        expect(tester.send(:cocooned_default_label, :remove, :people)).to eq('Remove')
       end
     end
 
     context 'when no translation exist' do
       it 'returns the humanized name of the action' do
-        expect(@tester.send(:cocooned_default_label, :remove, :posts)).to eq('Remove')
+        expect(tester.send(:cocooned_default_label, :remove, :posts)).to eq('Remove')
       end
     end
   end
