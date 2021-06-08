@@ -12,7 +12,7 @@ module Cocooned
 
       module_function
 
-      def deprecate_release_message(target_and_name, replacement, release = '2.0', location = nil)
+      def deprecate_release_message(target_and_name, replacement, release = '3.0', location = nil)
         [
           "NOTE: #{target_and_name} is deprecated",
           replacement == :none ? ' with no replacement' : "; use #{replacement} instead",
@@ -21,7 +21,7 @@ module Cocooned
         ].join.strip
       end
 
-      def deprecate_release(name, replacement, release = '2.0')
+      def deprecate_release(name, replacement, release = '3.0')
         class_eval do
           old = "_deprecated_#{name}"
           alias_method old, name

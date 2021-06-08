@@ -7,7 +7,7 @@ module Cocooned
     # Provide aliases to old Cocoon method for backward compatibility.
     # Cocoon methods are deprecated and will be removed in next major release.
     #
-    # TODO: Remove in 2.0
+    # TODO: Remove in 3.0
     module CocoonCompatibility
       extend Cocooned::Helpers::Deprecate
 

@@ -5,7 +5,7 @@ require 'cocooned/helpers/cocoon_compatibility'
 require 'cocooned/association_builder'
 
 module Cocooned
-  # TODO: Remove in 2.0 (Only Cocoon class names).
+  # TODO: Remove in 3.0 (Only Cocoon class names).
   HELPER_CLASSES = {
     add: %w[cocooned-add add_fields],
     remove: %w[cocooned-remove remove_fields],
@@ -15,7 +15,7 @@ module Cocooned
 
   module Helpers # rubocop:disable Metrics/ModuleLength
     # Create aliases to old Cocoon method name
-    # TODO: Remove in 2.0
+    # TODO: Remove in 3.0
     include Cocooned::Helpers::CocoonCompatibility
 
     # Output an action link to add an item in a nested form.
