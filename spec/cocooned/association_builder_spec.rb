@@ -2,112 +2,157 @@
 
 describe Cocooned::AssociationBuilder do
   describe '#build_object' do
-    it 'creates correct association for belongs_to associations' do
-      post = Post.new
-      form = double(object: post)
-      builder = described_class.new(form, :author)
-      result = builder.build_object
+    context 'with belongs_to associations' do
+      subject(:builder) { described_class.new(form, :author) }
 
-      expect(result).to be_a Person
-      expect(post.author).to be_nil
+      let(:form) { double(object: post) }
+      let(:post) { Post.new }
+
+      it 'does not set association value' do
+        builder.build_object
+        expect(post.author).to be_nil
+      end
+
+      it 'creates associated object of correct type' do
+        expect(builder.build_object).to be_a Person
+      end
     end
 
-    it 'creates correct association with conditions' do
-      person = Person.new
-      form = double(object: person)
-      builder = described_class.new(form, :alumni)
-      result = builder.build_object
+    context 'with has_one associations' do
+      subject(:builder) { described_class.new(form, :biography) }
 
-      expect(result).to be_a Person
-      expect(result.status).to eq('student')
-      expect(person.alumni).to be_empty
+      let(:form) { double(object: person) }
+      let(:person) { Person.new }
+
+      it 'does not set association value' do
+        builder.build_object
+        expect(person.biography).to be_nil
+      end
+
+      it 'creates associated object of correct type' do
+        expect(builder.build_object).to be_a Post
+      end
     end
 
-    it 'creates correct association for has_one associations' do
-      person = Person.new
-      form = double(object: person)
-      builder = described_class.new(form, :biography)
-      result = builder.build_object
+    context 'with has_many associations' do
+      subject(:builder) { described_class.new(form, :posts) }
 
-      expect(result).to be_a Post
-      expect(person.biography).to be_nil
+      let(:form) { double(object: person) }
+      let(:person) { Person.new }
+
+      it 'does not set association value' do
+        builder.build_object
+        expect(person.biography).to be_nil
+      end
+
+      it 'creates associated object of correct type' do
+        expect(builder.build_object).to be_a Post
+      end
     end
 
-    it 'creates correct association for has_many associations' do
-      person = Person.new
-      form = double(object: person)
-      builder = described_class.new(form, :posts)
-      result = builder.build_object
+    context 'with has_and_belongs_to_many associations' do
+      subject(:builder) { described_class.new(form, :contacts) }
 
-      expect(result).to be_a Post
-      expect(person.posts).to be_empty
+      let(:form) { double(object: person) }
+      let(:person) { Person.new }
+
+      it 'does not set association value' do
+        builder.build_object
+        expect(person.contacts).to be_empty
+      end
+
+      it 'creates associated object of correct type' do
+        expect(builder.build_object).to be_a Person
+      end
     end
 
-    it 'creates correct association for has_and_belongs_to_many associations' do
-      person = Person.new
-      form = double(object: person)
-      builder = described_class.new(form, :contacts)
-      result = builder.build_object
+    context 'with an association with conditions' do
+      subject(:builder) { described_class.new(form, :alumni) }
 
-      expect(result).to be_a Person
-      expect(person.contacts).to be_empty
+      let(:person) { Person.new }
+      let(:form) { double(object: person) }
+
+      it 'does not set association value' do
+        builder.build_object
+        expect(person.alumni).to be_empty
+      end
+
+      it 'creates associated object of correct type' do
+        expect(builder.build_object).to be_a Person
+      end
+
+      it 'creates associated object matching conditions' do
+        expect(builder.build_object.status).to eq('student')
+      end
     end
 
-    it 'creates an object if cannot reflect on association' do
-      object = double('AnyNonActiveRecordObject')
-      form = double(object: object)
-      builder = described_class.new(form, :non_reflectable)
+    context 'with an association without reflection' do
+      subject(:builder) { described_class.new(form, :non_reflectable) }
 
-      expect(object).to receive(:build_non_reflectable).and_return 'custom'
-      result = builder.build_object
-      expect(result).to eq('custom')
+      let(:object) { double('AnyNonActiveRecordObject') }
+      let(:form) { double(object: object) }
+
+      it 'uses #build_association to build an object' do
+        allow(object).to receive(:build_non_reflectable).and_return 'custom'
+        builder.build_object
+
+        expect(object).to have_received(:build_non_reflectable)
+      end
     end
 
-    context "if object respond to 'build_association'" do
-      subject do
+    context 'when object respond to #build_association' do
+      let(:form) { double(object: object) }
+      let(:object) { model.new }
+      let(:model) do
         Class.new(Post) do
-          def build_custom_item; end
+          def build_custom_item
+            'custom'
+          end
         end
       end
 
-      it 'creates an association as singular' do
-        object = subject.new
-        form = double(object: object)
-        builder = described_class.new(form, :custom_item)
+      context 'with a singular association' do
+        subject(:builder) { described_class.new(form, :custom_item) }
 
-        expect(object).to receive(:build_custom_item).and_return('custom')
-        result = builder.build_object
-        expect(result).to eq('custom')
+        it 'uses #build_association to build an object' do
+          expect(builder.build_object).to eq('custom')
+        end
       end
 
-      it 'creates an association as plural' do
-        object = subject.new
-        form = double(object: object)
-        builder = described_class.new(form, :custom_items)
+      context 'with a plural association' do
+        subject(:builder) { described_class.new(form, :custom_items) }
 
-        expect(object).to receive(:build_custom_item).and_return('custom')
-        result = builder.build_object
-        expect(result).to eq('custom')
+        it 'uses #build_association to build an object' do
+          expect(builder.build_object).to eq('custom')
+        end
       end
     end
 
-    it 'can create using only conditions not the association' do
-      person = Person.new
-      form = double(object: person)
-      builder = described_class.new(form, :alumni, force_non_association_create: true)
+    context 'with :force_non_association_create' do
+      subject(:builder) { described_class.new(form, :alumni, force_non_association_create: true) }
 
-      expect(builder).to receive(:build_with_conditions).and_return('flappie')
-      result = builder.build_object
-      expect(result).to eq('flappie')
+      let(:person) { Person.new }
+      let(:form) { double(object: person) }
+
+      it 'creates using only conditions' do
+        expect(person.alumni).not_to receive(:build)
+        builder.build_object
+      end
+
+      it 'creates associated object of correct type' do
+        expect(builder.build_object).to be_a Person
+      end
     end
 
-    it 'can wrap object' do
-      person = Person.new
-      form = double(object: person)
-      builder = described_class.new(form, :posts, wrap_object: proc { |p| PostDecorator.new(p) })
+    context 'with :wrap_object' do
+      subject(:builder) { described_class.new(form, :posts, wrap_object: proc { |p| PostDecorator.new(p) }) }
 
-      result = builder.build_object
-      expect(result).to be_a(PostDecorator)
+      let(:person) { Person.new }
+      let(:form) { double(object: person) }
+
+      it 'decorates the created object' do
+        expect(builder.build_object).to be_a(PostDecorator)
+      end
     end
   end
 end

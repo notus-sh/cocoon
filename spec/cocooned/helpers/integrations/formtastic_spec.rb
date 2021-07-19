@@ -6,20 +6,23 @@ describe Cocooned::Helpers do
   let(:person) { Person.new }
 
   describe '#cocooned_add_item_link' do
-    subject do
-      proc do |*args, &block|
-        view.cocooned_add_item_link(*args, &block)
-      end
-    end
+    subject(:method) { view.method(:cocooned_add_item_link) }
 
     context 'with formtastic' do
       before do
         allow(form).to receive_message_chain(:class, :ancestors) { ['Formtastic::FormBuilder'] }
-        expect(form).to receive(:semantic_fields_for).and_return('<form>')
-        expect(form).not_to receive(:fields_for)
+        allow(form).to receive(:semantic_fields_for).and_return('<form>')
       end
 
-      it_behaves_like 'a link helper', :add, 3
+      it_behaves_like 'a link helper', :add
+
+      it 'does not call #fields_for' do
+        allow(form).to receive(:fields_for)
+        arguments = ['label', form, (method.arity == -1 ? :posts : nil)].compact
+        method.call(*arguments)
+
+        expect(form).not_to have_received(:fields_for)
+      end
     end
   end
 end

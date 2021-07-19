@@ -226,7 +226,7 @@ module Cocooned
     end
 
     def cocooned_default_label(action, association = nil)
-      # TODO: Remove in 2.0
+      # TODO: Remove in 3.0
       if I18n.exists?(:cocoon)
         msg = Cocooned::Helpers::Deprecate.deprecate_release_message('the :cocoon i18n scope', ':cocooned')
         warn msg

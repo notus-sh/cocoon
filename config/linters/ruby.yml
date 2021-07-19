@@ -23,3 +23,21 @@ Metrics/BlockLength:
     - 'spec/dummy/db/schema.rb'
     - 'spec/cocooned/**/*_spec.rb'
     - 'spec/shared_examples/**/*.rb'
+
+RSpec/FilePath:
+  Enabled: false
+RSpec/NestedGroups:
+  Max: 4
+
+RSpec/AnyInstance:
+  Enabled: false
+RSpec/MessageSpies:
+  Enabled: false
+RSpec/VerifiedDoubles:
+  Enabled: false
+RSpec/StubbedMock:
+  Enabled: false
+RSpec/ExpectInHook:
+  Enabled: false
+RSpec/MessageChain:
+  Enabled: false

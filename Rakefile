@@ -20,6 +20,8 @@ RuboCop::RakeTask.new do |task|
 end
 
 # JavaScript
+# rubocop:disable Rails/RakeEnvironment
+# eslint related tasks does not need to load Rails environment
 eslint_args = ['--no-eslintrc', '--config config/linters/js.json']
 eslint_path = ['app/assets/**/*.js', 'spec/javascripts/**/*.js', 'spec/dummy/app/assets/**/*.js']
 
@@ -34,6 +36,7 @@ desc 'Run eslint'
 task :eslint do
   system("yarnpkg run eslint #{eslint_args.join(' ')} #{eslint_path.join(' ')}")
 end
+# rubocop:enable Rails/RakeEnvironment
 
 # Both
 namespace :linters do
@@ -69,6 +72,8 @@ npm_files = {
 }
 
 namespace :npm do
+  # rubocop:disable Rails/RakeEnvironment
+  # npm related tasks does not need to load Rails environment
   npm_files.each do |dest, src|
     file dest => src do
       cp src, dest
@@ -101,6 +106,7 @@ namespace :npm do
   task release: %i[build] do
     system("npm publish ./pkg/#{npm_scope}-#{spec.name}-#{spec.version}.tgz --access public")
   end
+  # rubocop:enable Rails/RakeEnvironment
 end
 
 desc 'Build packages and push them to their respective repository'
